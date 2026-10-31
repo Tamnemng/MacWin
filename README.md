@@ -2,6 +2,8 @@
 
 ![MacWin trên desktop: menu bar trong mờ với tên app, đồng hồ, CPU/RAM, pin](docs/screenshots/desktop.png)
 
+<p align="center"><img src="docs/screenshots/dock.png" width="100%" alt="Dock Liquid Glass: Finder, Launchpad, Trình duyệt, Tin nhắn, Mail, Lịch, Reminders, Notes, Music, Store, Settings, app đang chạy sau vạch ngăn, Downloads và Thùng rác"></p>
+
 <p align="center">
   <img src="docs/screenshots/settings-appearance.png" width="49%" alt="Settings ▸ Appearance: Light/Dark/Auto, màu nhấn, Liquid Glass, Live glass, Transparency, Window buttons">
   <img src="docs/screenshots/settings-about.png" width="49%" alt="Settings ▸ About: mở thư mục cài đặt, Restore & Quit, Uninstall, giấy phép mã nguồn mở">
