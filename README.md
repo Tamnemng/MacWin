@@ -1,6 +1,6 @@
 # MacWin — giao diện kiểu macOS cho Windows 10/11
 
-![MacWin trên desktop: menu bar trong mờ phía trên, Dock Liquid Glass phía dưới](docs/screenshots/desktop.png)
+![MacWin trên desktop: menu bar trong mờ với tên app, đồng hồ, CPU/RAM, pin](docs/screenshots/desktop.png)
 
 <p align="center">
   <img src="docs/screenshots/settings-appearance.png" width="49%" alt="Settings ▸ Appearance: Light/Dark/Auto, màu nhấn, Liquid Glass, Live glass, Transparency, Window buttons">
