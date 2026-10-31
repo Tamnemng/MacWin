@@ -817,6 +817,8 @@ namespace MacWin.UI
         {
             var item = _dragging == null && !_menuOpen ? HoveredItem() : null;
             if (_dragging != null && _dragOut && _dragging.Pinned && Removable(_dragging)) item = null;
+            UpdatePreviews(item);
+            if (item != null && _previews?.Item == item) item = null;   // the preview strip replaces the name label
             if (item != null)
             {
                 if (_labelFor != item)
@@ -1096,6 +1098,7 @@ namespace MacWin.UI
 
         void Activate(DockItem item)
         {
+            _previews?.HideAnimated();
             switch (item.Kind)
             {
                 case DockItemKind.Launchpad: App.ToggleLaunchpad(); return;
@@ -1127,6 +1130,59 @@ namespace MacWin.UI
             WindowTracker.Activate(wins[0]);
         }
 
+        // ================================================================== window previews (hover an icon with 2+ windows)
+
+        WindowPreviews _previews;
+        DockItem _previewPending;
+        DateTime _previewSince;
+        DispatcherTimer _previewTimer;
+
+        bool PreviewAnchorHovered(DockItem item) => _hovering && HoveredItem() == item;
+
+        void UpdatePreviews(DockItem hovered)
+        {
+            if (!App.Settings.DockWindowPreviews || _menuOpen || _dragging != null)
+            {
+                _previewPending = null;
+                _previewTimer?.Stop();
+                _previews?.HideAnimated();
+                return;
+            }
+            bool eligible = hovered != null && hovered.Kind is DockItemKind.App or DockItemKind.Role && hovered.AppId != null
+                            && WindowTracker.WindowsOf(hovered.AppId).Count >= 2;
+            if (eligible)
+            {
+                if (_previews?.IsOpen == true && _previews.Item == hovered) return;
+                if (_previewPending != hovered) { _previewPending = hovered; _previewSince = DateTime.Now; }
+                double dwell = _previews?.IsOpen == true ? 90 : 420;   // already showing for a neighbour: follow quickly
+                if ((DateTime.Now - _previewSince).TotalMilliseconds < dwell)
+                {
+                    // the frame loop goes idle while the pointer rests: keep poking it until the dwell completes
+                    _previewTimer ??= MakePreviewTimer();
+                    if (!_previewTimer.IsEnabled) _previewTimer.Start();
+                    return;
+                }
+                _previewTimer?.Stop();
+                _previews ??= new WindowPreviews(PreviewAnchorHovered);
+                _previews.ShowFor(hovered, hovered.View, Pos);
+            }
+            else
+            {
+                _previewPending = null;
+                _previewTimer?.Stop();
+                if (_previews?.IsOpen != true) return;
+                if (hovered != null) _previews.HideAnimated();   // moved onto an icon without previews
+                else _previews.HideSoon();                        // left the Dock: the pointer may be heading for the strip
+            }
+        }
+
+        DispatcherTimer MakePreviewTimer()
+        {
+            var t = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromMilliseconds(70) };
+            t.Tick += (_, _) => { if (_previewPending == null) t.Stop(); else StartLoop(); };
+            return t;
+        }
+
         // ================================================================== menus
 
         void OpenMenu(ContextMenu cm, FrameworkElement anchor)
@@ -1144,6 +1200,7 @@ namespace MacWin.UI
                 };
             };
             _menuOpen = true;
+            _previews?.HideAnimated();
             cm.Closed += (_, _) => { _menuOpen = false; StartLoop(); };
             cm.IsOpen = true;
             StartLoop();

@@ -410,6 +410,8 @@ namespace MacWin.UI
             Row(g2, "Always hide and show the Dock automatically", Switch(S.DockAutoHide, v => S.DockAutoHide = v));
             Row(g2, "Animate opening applications", Switch(S.BounceOnLaunch, v => S.BounceOnLaunch = v));
             Row(g2, "Show indicators for open applications", Switch(S.ShowIndicators, v => S.ShowIndicators = v));
+            Row(g2, "Show window previews on hover", Switch(S.DockWindowPreviews, v => S.DockWindowPreviews = v),
+                "When an app has two or more windows, resting the pointer on its icon shows them to choose from.");
             Row(g2, "Show running apps that aren't in the Dock", Switch(S.ShowRunningApps, v => S.ShowRunningApps = v));
             Row(g2, "Click the active app's icon to minimise it", Switch(S.ClickToMinimize, v => S.ClickToMinimize = v));
             DockItemsGroup(body);

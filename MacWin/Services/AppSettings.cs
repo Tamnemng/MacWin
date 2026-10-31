@@ -49,6 +49,7 @@ namespace MacWin.Services
         public bool DockAutoHide { get; set; } = false;
         public bool DockSmartHide { get; set; } = true;   // hide only while a window is maximised or overlaps the Dock
         public bool ShowIndicators { get; set; } = true;
+        public bool DockWindowPreviews { get; set; } = true;   // hover an icon with 2+ windows: thumbnails to pick from
         public bool BounceOnLaunch { get; set; } = true;
         public bool ShowRunningApps { get; set; } = true;
         public bool SquircleIcons { get; set; } = true;
